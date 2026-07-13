@@ -1,66 +1,46 @@
-## Minimalistic rEFInd theme
+## rEFInd-darkflake
 
-[rEFInd](http://www.rodsbooks.com/refind/) is an easy to use boot manager for UEFI
-based systems. This is a clean and minimal theme for it.
+A clean, dark, minimal theme for the [rEFInd](http://www.rodsbooks.com/refind/) UEFI boot manager.
 
-![rEFInd Minimalistic](http://i.imgur.com/3bMG6U7.png)
+This repo exists so I can tweak the theme files to work with my personal NixOS configuration. \
+The theme icons mainly come from [andersfischernielsen/rEFInd-minimal-black](https://github.com/andersfischernielsen/rEFInd-minimal-black).
 
-### Usage
+### Installation
+Despite the name this is not actually a NixOS flake. You still need to get the files onto your ESP yourself.
+Either copy them to `/boot/EFI/refind/themes/rEFInd-darkflake`, or use the
+[`boot.loader.refind`](https://github.com/NixOS/nixpkgs/blob/nixos-unstable/nixos/modules/system/boot/loader/refind/refind.nix)
+options in nixpkgs. Note that module has no theme option, so you'd use `additionalFiles` to place the theme
+and `extraConfig` for the include line below.
 
- 1. Locate your refind EFI directory. This is commonly `/boot/EFI/refind`
-    though it will depend on where you mount your ESP and where rEFInd is
-    installed. `fdisk -l` and `mount` may help.
+Then enable the theme by adding this to the end of your `refind.conf`:
 
- 2. Create a folder called `themes` inside it, if it doesn't already exist
+```conf
+include themes/rEFInd-darkflake/theme.conf
+```
 
- 3. Clone this repository into the `themes` directory.
+Here's an example menuentry configuration
 
- 4. To enable the theme add `include themes/rEFInd-minimal/theme.conf` at the end of
-    `refind.conf`.
-
-Here's an example menuentry configuration (from the screenshot)
-
-```nginx
-menuentry "Arch Linux" {
-	icon /EFI/refind/themes/rEFInd-minimal/icons/os_arch.png
-	loader vmlinuz-linux
-	initrd initramfs-linux.img
-	options "rw root=UUID=dfb2919d-ff78-48db-a8a7-23f7542c343a loglevel=3"
+```conf
+menuentry "NixOS" {
+    icon /EFI/refind/themes/rEFInd-darkflake/icons/os_nixos.png
+    loader /EFI/NixOS-boot/grubx64.efi
 }
-
+ 
 menuentry "Windows" {
-	icon /EFI/refind/themes/rEFInd-minimal/icons/os_win.png
-	loader /EFI/Microsoft/Boot/bootmgfw.efi
-}
-
-menuentry "OSX" {
-	icon /EFI/refind/themes/rEFInd-minimal/icons/os_mac.png
-	loader /EFI/Apple/Boot/bootmgfw.efi
+    icon /EFI/refind/themes/rEFInd-darkflake/icons/os_win.png
+    loader /EFI/Microsoft/Boot/bootmgfw.efi
 }
 ```
 
-Entries that are autodetected should also show the proper icons.
+Entry detection depends on your main rEFInd `.conf` file. Just make sure to point the icon at
+`/EFI/refind/themes/rEFInd-darkflake/icons/<os_icon.png>`
 
-### Background sizes
+### Attribution & licence
 
-If you find the background looks blurry it may be due to the included wallpaper
-being an incorrect resolution for your monitor. You can download the [original
-high quality wallpaper][wallpaper], resize it as appropriate, and replace the
-`background.png`.
-
-You can of course also choose your own background!
-
-### Attribution
-
-The OS icons are from [Lightness for burg][icons] by [SWOriginal][icon-author].
-
-The background is [Minimalist Wallpaper][wallpaper] by
-[LeonardoAIanB][wallpaper-author]. Thank you to [Padster][padster] for locating
-it!
-
-[icons]: http://sworiginal.deviantart.com/art/Lightness-for-burg-181461810
-[icon-author]: http://sworiginal.deviantart.com/
-
-[padster]: https://github.com/theRealPadster
-[wallpaper]: http://leonardoalanb.deviantart.com/art/Minimalist-wallpaper-295519786
-[wallpaper-author]: http://leonardoalanb.deviantart.com/
+- Black theme: [andersfischernielsen](https://github.com/andersfischernielsen/rEFInd-minimal-black)
+- Original theme: [evanpurkhiser](https://github.com/evanpurkhiser/rEFInd-minimal)
+- OS icons: [Lightness for burg](http://sworiginal.deviantart.com/art/Lightness-for-burg-181461810)
+  by [SWOriginal](http://sworiginal.deviantart.com/)
+\
+\
+  MIT [`LICENSE`](LICENSE).
